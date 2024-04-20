@@ -17,31 +17,32 @@ let nambers;
 let hundreds;
 let safeAnswerNumber;
 
+function transformation() {
 safeAnswerNumber = answerNumber;
 tens = Math.abs(answerNumber%100);
 nambers = Math.abs(answerNumber%10);
-
+hundreds = Math.abs(answerNumber);
 minus = (answerNumber<0) ? 'минус ' : '' ;
 
-if (99<Math.abs(answerNumber) && Math.abs(answerNumber)<200) {
+if (99<hundreds && hundreds<200) {
     hundreds = 'сто '
-} else if (199<Math.abs(answerNumber) && Math.abs(answerNumber)<300) {
+} else if (199<hundreds && hundreds<300) {
     hundreds = 'двести '
-} else if (299<Math.abs(answerNumber) && Math.abs(answerNumber)<400) {
+} else if (299<hundreds && hundreds<400) {
     hundreds = 'триста '
-} else if (399<Math.abs(answerNumber) && Math.abs(answerNumber)<500) {
+} else if (399<hundreds && hundreds<500) {
     hundreds = 'четыреста '
-} else if (499<Math.abs(answerNumber) && Math.abs(answerNumber)<600) {
+} else if (499<hundreds && hundreds<600) {
     hundreds = 'пятьсот '
-} else if (599<Math.abs(answerNumber) && Math.abs(answerNumber)<700) {
+} else if (599<hundreds && hundreds<700) {
     hundreds = 'шестьсот '
-} else if (699<Math.abs(answerNumber) && Math.abs(answerNumber)<800) {
+} else if (699<hundreds && hundreds<800) {
     hundreds = 'семьсот '
-} else if (799<Math.abs(answerNumber) && Math.abs(answerNumber)<900) {
+} else if (799<hundreds && hundreds<900) {
     hundreds = 'восемьсот '
-} else if (899<Math.abs(answerNumber) && Math.abs(answerNumber)<1000) {
+} else if (899<hundreds && hundreds<1000) {
     hundreds = 'девятьсот '
-} else if (answerNumber == 0) {
+} else if (hundreds == 0) {
     hundreds = 'ноль'
 } else hundreds = '';
 
@@ -100,6 +101,10 @@ else {tens = ''};
     if (longPhrse<20) {answerNumber}
     else {answerNumber = safeAnswerNumber};
 
+    return answerNumber }
+
+transformation() ;
+
 const orderNumberField = document.getElementById('orderNumberField');
 const answerField = document.getElementById('answerField');
 orderNumberField.innerText = orderNumber;
@@ -117,9 +122,10 @@ switch (answer) {
     case 3:
         answerField.innerText = `Это точно: ${answerNumber}?`;
         break; }
-
+answerNumber = safeAnswerNumber;
         
 document.getElementById('btnRetry').addEventListener('click', function (e) {
+    e.preventDefault();
     minValue = parseInt(prompt('Минимальное знание числа для игры','0'))||0;
     minValue = (minValue<-999) ? -999 : minValue ;
     maxValue = parseInt(prompt('Максимальное знание числа для игры','100'));
@@ -127,13 +133,14 @@ document.getElementById('btnRetry').addEventListener('click', function (e) {
     else {maxValue = maxValue||100};
     maxValue = (maxValue>999) ? 999 : maxValue ;
     alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
-    answerField.innerText = `Вы загадали число ${Math.floor((minValue + maxValue) / 2)}?`;
-    safeAnswerNumber = Math.floor((minValue + maxValue) / 2);
-    answerNumber = safeAnswerNumber;
+    answerNumber = Math.floor((minValue + maxValue) / 2);
+    transformation();
+    answerField.innerText = `Вы загадали число ${answerNumber}?`;
     orderNumber = 1;
     orderNumberField.innerText = 1;
-    e.preventDefault();
     gameRun = true;
+    answerNumber = safeAnswerNumber;
+
 })
 
 document.getElementById('btnOver').addEventListener('click', function () {
@@ -147,24 +154,26 @@ document.getElementById('btnOver').addEventListener('click', function () {
             answerField.innerText = answerPhrase;
             gameRun = false;
         } else {
-            minValue = safeAnswerNumber  + 1;
-            safeAnswerNumber  = Math.floor((minValue + maxValue) / 2);
+            minValue = answerNumber  + 1;
+            answerNumber  = Math.floor((minValue + maxValue) / 2);
+            transformation();
             orderNumber++;
             orderNumberField.innerText = orderNumber;
             answer = Math.round(Math.random() * 3);
             switch (answer) {
                 case 0:
-                    answerField.innerText = `Да это легко! ${safeAnswerNumber}?`;
+                    answerField.innerText = `Да это легко! ${answerNumber}?`;
                     break;
                 case 1:
-                    answerField.innerText = `Наверное, это число ${safeAnswerNumber}?`;
+                    answerField.innerText = `Наверное, это число ${answerNumber}?`;
                     break;
                 case 2:
-                    answerField.innerText = `Вы загадали число ${safeAnswerNumber}?`;
+                    answerField.innerText = `Вы загадали число ${answerNumber}?`;
                     break;
                 case 3:
-                    answerField.innerText = `Это точно: ${safeAnswerNumber}?`;
+                    answerField.innerText = `Это точно: ${answerNumber}?`;
                     break; }
+            answerNumber = safeAnswerNumber;
         }
     }
 })
@@ -180,24 +189,26 @@ document.getElementById('btnLess').addEventListener('click', function () {
             answerField.innerText = answerPhrase;
             gameRun = false;
         } else {
-            maxValue = safeAnswerNumber  - 1;
-            safeAnswerNumber  = Math.ceil((maxValue + minValue) / 2);
+            maxValue = answerNumber  - 1;
+            answerNumber  = Math.ceil((maxValue + minValue) / 2);
+            transformation();
             orderNumber++;
             orderNumberField.innerText = orderNumber;
             answer = Math.round(Math.random() * 3);
             switch (answer) {
                 case 0:
-                    answerField.innerText = `Да это легко! ${safeAnswerNumber}?`;
+                    answerField.innerText = `Да это легко! ${answerNumber}?`;
                     break;
                 case 1:
-                    answerField.innerText = `Наверное, это число ${safeAnswerNumber}?`;
+                    answerField.innerText = `Наверное, это число ${answerNumber}?`;
                     break;
                 case 2:
-                    answerField.innerText = `Вы загадали число ${safeAnswerNumber}?`;
+                    answerField.innerText = `Вы загадали число ${answerNumber}?`;
                     break;
                 case 3:
-                    answerField.innerText = `Это точно: ${safeAnswerNumber}?`;
+                    answerField.innerText = `Это точно: ${answerNumber}?`;
                     break; }
+            answerNumber = safeAnswerNumber;
             //answerField.innerText = `Вы загадали число ${answerNumber }?`;
         }
     }
